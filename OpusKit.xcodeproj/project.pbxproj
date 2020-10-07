@@ -6,6 +6,21 @@
 	objectVersion = 50;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		92741277249F75F3005C1F69 /* OpusKit XCFramework */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 92741278249F75F3005C1F69 /* Build configuration list for PBXAggregateTarget "OpusKit XCFramework" */;
+			buildPhases = (
+				9274127B249F763A005C1F69 /* Build Frameworks */,
+				9274127C249F767B005C1F69 /* Create XCFramework */,
+			);
+			dependencies = (
+			);
+			name = "OpusKit XCFramework";
+			productName = "OpusKit XCFramework";
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		92D599F5244C489500B9DCD5 /* OpusKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 92D599F3244C489500B9DCD5 /* OpusKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		92D59A03244C48CF00B9DCD5 /* OpusAudioBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 92D599FC244C48CF00B9DCD5 /* OpusAudioBuffer.h */; };
@@ -44,6 +59,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		92741265249F74DC005C1F69 /* test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
+		92741266249F74DC005C1F69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		92D599F0244C489500B9DCD5 /* OpusKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OpusKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		92D599F3244C489500B9DCD5 /* OpusKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpusKit.h; sourceTree = "<group>"; };
 		92D599F4244C489500B9DCD5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -95,10 +112,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		92741264249F74DC005C1F69 /* test */ = {
+			isa = PBXGroup;
+			children = (
+				92741265249F74DC005C1F69 /* test.h */,
+				92741266249F74DC005C1F69 /* Info.plist */,
+			);
+			path = test;
+			sourceTree = "<group>";
+		};
 		92D599E6244C489500B9DCD5 = {
 			isa = PBXGroup;
 			children = (
 				92D599F2244C489500B9DCD5 /* OpusKit */,
+				92741264249F74DC005C1F69 /* test */,
 				92D599F1244C489500B9DCD5 /* Products */,
 				92D59A45244C48ED00B9DCD5 /* Frameworks */,
 			);
@@ -296,9 +323,12 @@
 		92D599E7244C489500B9DCD5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1130;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = Avaloq;
 				TargetAttributes = {
+					92741277249F75F3005C1F69 = {
+						CreatedOnToolsVersion = 11.5;
+					};
 					92D599EF244C489500B9DCD5 = {
 						CreatedOnToolsVersion = 11.3.1;
 					};
@@ -318,6 +348,7 @@
 			projectRoot = "";
 			targets = (
 				92D599EF244C489500B9DCD5 /* OpusKit */,
+				92741277249F75F3005C1F69 /* OpusKit XCFramework */,
 			);
 		};
 /* End PBXProject section */
@@ -331,6 +362,50 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		9274127B249F763A005C1F69 /* Build Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(SRCROOT)/build/iphoneos/OpusKit.framework",
+				"$(SRCROOT)/build/iphonesimulator/OpusKit.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "XCODE_VERSION=$(xcodebuild -version | head -n 1| awk -F ' ' '{print $2}')\nXCODE_VERSION_MAJOR=$(echo $XCODE_VERSION | awk -F '.' '{print $1}')\n\nmkdir -p $(SRCROOT)/build\ndeclare -a PLATFORMS=(\"iphoneos\" \"iphonesimulator\")\nfor CURRENT_PLATFORM in \"${PLATFORMS[@]}\"\ndo\n    if [[ $CURRENT_PLATFORM == *\"simulator\" ]]; then\n        xcodebuild build -project \"OpusKit.xcodeproj\" -sdk \"${CURRENT_PLATFORM}\" -scheme \"OpusKit\" -configuration \"Debug\" -derivedDataPath \"${SRCROOT}/build/DerivedData\" CONFIGURATION_BUILD_DIR=\"${SRCROOT}/build/${CURRENT_PLATFORM}/\"\n    else\n        xcodebuild archive -project \"OpusKit.xcodeproj\" -sdk \"${CURRENT_PLATFORM}\" -scheme \"OpusKit\" -configuration \"Release\" -archivePath \"${SRCROOT}/build/${CURRENT_PLATFORM}/OpusKit.xcarchive\" SKIP_INSTALL=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES\n    fi\n    mv \"${SRCROOT}/build/${CURRENT_PLATFORM}/OpusKit.xcarchive/Products/Library/Frameworks/OpusKit.framework\" \"${SRCROOT}/build/${CURRENT_PLATFORM}/\"\n    mv \"${SRCROOT}/build/${CURRENT_PLATFORM}/OpusKit.xcarchive/dSYMs/OpusKit.framework.dSYM\" \"${SRCROOT}/build/${CURRENT_PLATFORM}/\"\n    rm -rf \"${SRCROOT}/build/${CURRENT_PLATFORM}/OpusKit.xcarchive/\"\ndone\n";
+		};
+		9274127C249F767B005C1F69 /* Create XCFramework */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/build/iphoneos/OpusKit.framework",
+				"$(SRCROOT)/build/iphonesimulator/OpusKit.framework",
+			);
+			name = "Create XCFramework";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(SRCROOT)/build/OpusKit.xcframework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "XCODE_VERSION=$(xcodebuild -version | head -n 1| awk -F ' ' '{print $2}')\nXCODE_VERSION_MAJOR=$(echo $XCODE_VERSION | awk -F '.' '{print $1}')\n\ndeclare -a PLATFORMS=(\"iphoneos\" \"iphonesimulator\")\nCOMMAND_ARGS=\"\"\nfor CURRENT_PLATFORM in \"${PLATFORMS[@]}\"\ndo\n    COMMAND_ARGS=\"${COMMAND_ARGS} -framework ${SRCROOT}/build/${CURRENT_PLATFORM}/OpusKit.framework\"\ndone\n\n# Combine XCFramework\nxcodebuild -create-xcframework $COMMAND_ARGS -output \"${SRCROOT}/build/OpusKit.xcframework\"\nopen -a Finder \"${SRCROOT}/build/OpusKit.xcframework\"\n\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		92D599EC244C489500B9DCD5 /* Sources */ = {
@@ -357,6 +432,22 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		92741279249F75F3005C1F69 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		9274127A249F75F3005C1F69 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		92D599F6244C489500B9DCD5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -383,6 +474,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -394,6 +486,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -408,7 +501,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -444,6 +537,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -455,6 +549,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -463,7 +558,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -483,7 +578,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = OpusKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -511,7 +606,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = OpusKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -532,6 +627,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		92741278249F75F3005C1F69 /* Build configuration list for PBXAggregateTarget "OpusKit XCFramework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				92741279249F75F3005C1F69 /* Debug */,
+				9274127A249F75F3005C1F69 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		92D599EA244C489500B9DCD5 /* Build configuration list for PBXProject "OpusKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
